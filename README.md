@@ -1,22 +1,26 @@
-# sv
+# Documentation
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+A lightweight web-application to plan your schedule.
 
-## Creating a project
+## Technology decision
 
-If you're seeing this, you've probably already done this step. Congrats!
+We use the framework SvelteKit because we have worked with it a lot in the past.
 
-```bash
-# create a new project in the current directory
-npx sv create
+Svelte provides frontend as well as backend. To work with it the server files just have to be tagged with an additional .server extension.
+PostgresSQL is chosen as a powerful and common database.
 
-# create a new project in my-app
-npx sv create my-app
-```
+## Team Roles
+
+Roles which are mainly focused on their topics:
+
+* Frontend-Master: ...
+* Backend-Master: ...
+* Database-Master: ...
+* QA-Tester: ...
 
 ## Developing
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+Install dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
 
 ```bash
 npm run dev
@@ -27,7 +31,7 @@ npm run dev -- --open
 
 ## Building
 
-To create a production version of your app:
+To create a production version of the app:
 
 ```bash
 npm run build
