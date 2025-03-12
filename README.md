@@ -6,7 +6,7 @@ A lightweight web-application to plan your schedule.
 
 We use the framework SvelteKit because we have worked with it a lot in the past.
 
-Svelte provides frontend as well as backend. To work with it the server files just have to be tagged with an additional .server extension.
+Svelte provides frontend as well as backend. To work with it the server files just have to be tagged with an additional .server extension.</br>
 PostgresSQL is chosen as a powerful and common database.
 
 ## Team Roles
