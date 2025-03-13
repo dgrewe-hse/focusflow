@@ -2,41 +2,28 @@
 
 A lightweight web-application to plan your schedule.
 
+---
+
 ## Technology decision
 
-We use the framework SvelteKit because we have worked with it a lot in the past.
+- Frontend: SvelteKit
+- CSS Framework: TailwindCSS, daisyUI
+- Backend: Node.js
+- ORM: Prisma
+- Database: PostgreSQL
+- Deployment: Docker
 
-Svelte provides frontend as well as backend. To work with it the server files just have to be tagged with an additional .server extension.</br>
-PostgresSQL is chosen as a powerful and common database.
+---
 
-## Team Roles
+## Setup
 
-Roles which are mainly focused on their topics:
-
-* Frontend-Master: ...
-* Backend-Master: ...
-* Database-Master: ...
-* QA-Tester: ...
-
-## Developing
-
-Install dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
-
-## Building
-
-To create a production version of the app:
-
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+1. Install dependencies with `npm install`
+2. Create an `.env`. It should contain the following:
+    ```dotenv
+    POSTGRES_USER=postgres
+    POSTGRES_PASSWORD=postgres
+    POSTGRES_DB=postgres
+    DATABASE_URL="postgresql://$POSTGRES_USER:$POSTGRES_PASSWORD@localhost:42187/$POSTGRES_DB?schema=public"
+    ```
+3. Start the development server with `npm run dev`
+4. If you want to have a database running, you can use `docker-compose up db -d` to start a postgres database.
