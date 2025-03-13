@@ -9,20 +9,22 @@ Our group consists of:
 
 We have decided to choose a group leader who will have a general overview of the project.
 This position will be taken by Florian Wieland. </br>
-The project will be split into four main work sections Frontend, Backend, Database and Testing. The assigned members are in charge of their section, but if there is downtime in development of a section, this section will support the others. Also the section aren't completely split so they are going to be mixed.
+The project will be split into four main work sections Frontend, Backend, Database and Testing.
+In this project, team members are encouraged to assist each other across different sections when needed, regardless of their primary responsibilities.
+Also the section aren't strictly seperated and may overlap.
 
 ## Frontend
 
-In charge of implementing and designing the frontend are Pablo Rodriguez and Florian Wieland.
+The implementation and design of the frontend will primarily be handled by Pablo Rodriguez and Florian Wieland.
 
 ## Backend
 
-Most of the work on the backend will be done by Alexander Laukart.
+Most of the backend development will be carried out by Alexander Laukart.
 
 ## Database
 
-Simon Raichle will be mainly working on implementing the database.
+Simon Raichle will be primarily responsible for implementing the database.
 
 ## QA-Tester
 
-The application is going to be mainly tested by Pablo Rodriguez and Florian Wieland.
+The application will mainly be tested by Pablo Rodriguez and Florian Wieland.
