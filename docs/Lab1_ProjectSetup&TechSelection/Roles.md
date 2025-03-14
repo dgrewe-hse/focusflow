@@ -5,6 +5,8 @@ Tim -> Felix -> Ergün -> Max
 
 # Roles
 
+## Merge-Master
+
 ## 1. Frontend:
 Ergün
 
