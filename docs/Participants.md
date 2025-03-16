@@ -1,5 +1,5 @@
-# Participants
+# Participants with GitHub accounts
 - Max Trautwein: MaxTrautwein
 - Tim Jauch: Skalt47
-- Ergün: 
-- Felix:
+- Ergün: pndroa
+- Felix: 1Fe1ix
