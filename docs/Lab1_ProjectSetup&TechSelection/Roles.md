@@ -5,13 +5,11 @@ Tim -> Felix -> Ergün -> Max
 
 # Roles
 
-## Merge-Master
-
 ## 1. Frontend:
-Ergün
+Ergün, Felix
 
 ## 2. Backend:
-Tim unterstüztend
+Max, Tim 
 
 ## 3. Database:
-Tim
+Tim, Felix
