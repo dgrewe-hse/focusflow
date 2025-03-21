@@ -2,4 +2,8 @@
     import "../style.css";
 </script>
 
-<slot></slot>
+<svelte:head>
+    <title>FocusFlow</title>
+</svelte:head>
+
+<slot/>

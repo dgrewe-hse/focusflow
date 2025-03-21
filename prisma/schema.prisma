@@ -14,14 +14,48 @@ datasource db {
 }
 
 model User {
-  id       Int       @id @default(autoincrement())
-  sessions Session[]
+  id            Int     @id @default(autoincrement())
+  email         String  @unique
+  username      String
+  passwordHash  String
+  emailVerified Boolean @default(false)
+  totpKey       Bytes?
+  recoveryCode  Bytes
+
+  sessions              Session[]
+  emailVerificationReqs EmailVerificationRequest[]
+  passwordResetSessions PasswordResetSession[]
+
+  @@index([email])
 }
 
 model Session {
+  id                String   @id
+  userId            Int
+  expiresAt         DateTime
+  twoFactorVerified Boolean  @default(false)
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+model EmailVerificationRequest {
   id        String   @id
   userId    Int
+  email     String
+  code      String
   expiresAt DateTime
 
-  user User @relation(references: [id], fields: [userId], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id])
+}
+
+model PasswordResetSession {
+  id                String   @id
+  userId            Int
+  email             String
+  code              String
+  expiresAt         DateTime
+  emailVerified     Boolean  @default(false)
+  twoFactorVerified Boolean  @default(false)
+
+  user User @relation(fields: [userId], references: [id])
 }
