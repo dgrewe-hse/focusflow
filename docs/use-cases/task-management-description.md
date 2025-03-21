@@ -1,5 +1,7 @@
 # Use Case ID: UC-001
 
+<img src="/docs/figures/use-case-task-management.png" alt="Task Management" style="max-width:600px;">
+
 ### Title:
 
     Manage tasks
@@ -7,15 +9,17 @@
 ### Primary Actor:
 
     Registered user
-    
-### Stackholders and Interests:
+
+### Stakeholders and Interests:
 
     - Registered user: Wants to schedule and manage his tasks.
     - System owner: Wants intuitive work flow.
 
 ### Summary
 
-    In this system the user can create tasks, set deadlines and monitor progress through status updates. Notifications and priority levels help ensure that critical tasks are completed on time. The system enhances productivity by streamlining workflows.
+    In this system the user can create tasks, set deadlines and monitor progress through status updates.
+    Notifications and priority levels help ensure that critical tasks are completed on time. The system enhances
+    productivity by streamlining workflows.
 
 ### Pre-Conditions
 
@@ -36,7 +40,7 @@
     7. User can add a deadline to a task
     8. User can delete a task
 
-### Exceptions / Extenssions (Alternate Flows)
+### Exceptions/Extensions (Alternate Flows)
 
     - 7a. Invalid deadline:
         - 4a1. Systems displays an error message for the incorrect field
@@ -49,10 +53,6 @@
 
     - The system synchronizes tasks with the database
 
-### Special Requirements:
-
-    - User needs permission to delete a shared task
-
-### Frequancy of Use:
+### Frequency of Use:
 
     Daily use (multiple usage per user)
