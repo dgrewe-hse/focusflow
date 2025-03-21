@@ -50,7 +50,6 @@
 
     - A new task is created
     - An existing task changes
-
     - The system synchronizes tasks with the database
 
 ### Frequency of Use:
