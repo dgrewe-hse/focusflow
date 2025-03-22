@@ -48,6 +48,9 @@ jobs:
             # Pull and run the new image
             docker compose pull
             docker compose up -d --force-recreate
-
-#            # Remove .env file
-#            rm .env
+            
+            # Wait for the container to start
+            sleep 10
+            
+            # Remove .env file
+            rm .env
