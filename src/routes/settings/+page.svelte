@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { enhance } from "$app/forms";
+    import Header from "$lib/components/header.svelte";
 
 	import type { PageData, ActionData } from "./$types";
 
@@ -7,10 +8,7 @@
 	export let form: ActionData;
 </script>
 
-<header>
-	<a href="/">Home</a>
-	<a href="/settings">Settings</a>
-</header>
+<Header/>
 <main>
 	<h1>Settings</h1>
 	<section>

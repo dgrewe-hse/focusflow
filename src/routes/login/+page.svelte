@@ -27,8 +27,8 @@
 				<button class="btn btn-neutral mt-2">Login</button>
 		
 				<div class="flex justify-between mt-2">
-					<a class="" href="/signup">Create an account</a>
-					<a class="" href="/forgot-password">Forgot password?</a>
+					<a class="p-1 link-hover" href="/signup">Create an account</a>
+					<a class="p-1 link-hover" href="/forgot-password">Forgot password?</a>
 				</div>
 			</form>
 		</fieldset>

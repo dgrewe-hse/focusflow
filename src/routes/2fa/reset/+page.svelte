@@ -6,10 +6,26 @@
 	export let form: ActionData;
 </script>
 
-<h1>Recover your account</h1>
-<form method="post" use:enhance>
-	<label for="form-totp.code">Recovery code</label>
-	<input id="form-totp.code" name="code" required /><br />
-	<button>Verify</button>
-	<p>{form?.message ?? ""}</p>
-</form>
+<div class="flex h-screen place-content-center items-center">
+	<div>
+		<fieldset class="fieldset w-xs bg-base-200 border border-base-300 p-4 rounded-box">
+			<legend class="fieldset-legend">Recover your account</legend>
+
+			<form class="fieldset w-xs p-4 pb-0" method="post" use:enhance>
+				
+				<label class="fieldset-label" for="form-totp.code">Recovery code</label>
+				<input class="input" id="form-totp.code" name="code" required />
+				
+				{#if form?.message == null}
+					<p class="text-error mt-1 invisible">{"Error message"}</p>
+				{:else}
+					<p class="text-error mt-1">{form?.message ?? ""}</p>
+				{/if}
+		
+				<button class="btn btn-neutral mt-2">Verify</button>
+			</form>
+		</fieldset>
+		<span>&DoubleLongLeftArrow;</span>
+		<a href="/2fa" class="p-1 link-hover">Back</a>
+	</div>
+</div>
