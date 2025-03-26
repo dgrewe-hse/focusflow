@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { onMount, tick } from "svelte";
+    import {onMount, tick} from "svelte";
 
     export let visibleTime : number = 3000,
         fadeIn : number = 500,
@@ -8,18 +8,17 @@
     onMount(async () => {
         await tick(); // Ensures DOM is ready
 
-        const HTMLBANNER = document.getElementById("banner");
-        if(HTMLBANNER == null)
-            return;
+        const htmlBanner = document.getElementById("banner");
+        if (!htmlBanner) return;
 
-        HTMLBANNER.style.transition = fadeIn + "ms";
-        HTMLBANNER.style.translate = "-50% 0%";
-        HTMLBANNER.style.opacity = "100%";
+        htmlBanner.style.transition = fadeIn + "ms";
+        htmlBanner.style.translate = "-50% 0%";
+        htmlBanner.style.opacity = "100%";
         
         setTimeout(() => {
-            HTMLBANNER.style.transition = fadeOut + "ms";
-            HTMLBANNER.style.translate = "-50% -100%";
-            HTMLBANNER.style.opacity = "0%";
+            htmlBanner.style.transition = fadeOut + "ms";
+            htmlBanner.style.translate = "-50% -100%";
+            htmlBanner.style.opacity = "0%";
         }, visibleTime);
     })
 </script>

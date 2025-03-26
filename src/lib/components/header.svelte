@@ -1,11 +1,11 @@
 <script lang="ts">
-    import { enhance } from "$app/forms";
-    import { theme } from "$lib/store/themeStore";
-    import { onMount } from "svelte";
-    import ThemeToggle from "./themeToggle.svelte";
+	import {enhance} from "$app/forms";
+	import {theme} from "$lib/store/themeStore";
+	import {onMount} from "svelte";
+	import ThemeToggle from "./themeToggle.svelte";
 
 	function logoutCallback() {
-		localStorage.removeItem("SessionInitalized");
+		localStorage.removeItem("SessionInitialized");
 	}
 
 	onMount(() => {
