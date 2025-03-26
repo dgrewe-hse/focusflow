@@ -15,6 +15,5 @@ if (isBrowser) {
     theme.subscribe((value) => {
         localStorage.setItem("theme", value);
         document.documentElement.setAttribute("data-theme", value);
-        console.log(document.documentElement, document.doctype);
     });
 }

@@ -87,5 +87,6 @@
 
 		He pressed the button.
 
-		Everything went white.	</p>
+		Everything went white.	
+	</p>
 </main>
