@@ -1,0 +1,45 @@
+{
+    "name": "FocusFlow Dev Env",
+    "dockerComposeFile": "docker-compose.yml",
+    "service": "app",
+    "workspaceFolder": "/workspace",
+    "shutdownAction": "stopCompose",
+    "forwardPorts": [8080, 5173],
+    "postCreateCommand": "bash .devcontainer/init-project.sh",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "vscjava.vscode-java-pack",
+                "vmware.vscode-spring-boot",
+                "redhat.vscode-xml",
+                "ms-azuretools.vscode-docker",
+                "dbaeumer.vscode-eslint",
+                "esbenp.prettier-vscode",
+                "bradlc.vscode-tailwindcss",
+                "ms-vscode.vscode-typescript-next",
+                "streetsidesoftware.code-spell-checker",
+                "eamodio.gitlens",
+                "github.vscode-github-actions",
+                "ms-vsliveshare.vsliveshare"
+            ],
+            "settings": {
+                "java.configuration.updateBuildConfiguration": "automatic",
+                "java.compile.nullAnalysis.mode": "automatic",
+                "editor.formatOnSave": true,
+                "editor.codeActionsOnSave": {
+                    "source.fixAll.eslint": true
+                },
+                "typescript.tsdk": "node_modules/typescript/lib",
+                "tailwindCSS.includeLanguages": {
+                    "typescript": "javascript",
+                    "typescriptreact": "javascript"
+                },
+                "editor.defaultFormatter": "esbenp.prettier-vscode",
+                "[java]": {
+                    "editor.defaultFormatter": "redhat.java"
+                }
+            }
+        }
+    },
+    "remoteUser": "vscode"
+}
