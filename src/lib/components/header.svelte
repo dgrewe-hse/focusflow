@@ -8,6 +8,7 @@
 		localStorage.removeItem("SessionInitialized");
 	}
 
+	// Propably not needed
 	onMount(() => {
 		document.documentElement.setAttribute("data-theme", $theme);
 	});

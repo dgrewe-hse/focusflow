@@ -1,18 +1,15 @@
 <script lang="ts">
-    import {theme} from "$lib/store/themeStore";
+    import {isDarkMode, theme} from "$lib/store/themeStore";
 
-    function setTheme(event: Event) {
-        // Cast event target to HTMLInputElement to access the "checked" property.
+    function toggleTheme(event: Event) {
         const checkbox: HTMLInputElement = event.target as HTMLInputElement;
-        // Set theme based on checkbox checked state:
-        // If checked, use 'focusflowDark'; otherwise, use 'focusflowLight'.
-        theme.set(checkbox.checked ? "focusflowDark" : "focusflowLight");
+        isDarkMode.set(checkbox.checked);
     }
 </script>
 
 <label class="swap swap-rotate">
     <!-- This hidden checkbox controls the theme state -->
-    <input type="checkbox" on:change={setTheme} />
+    <input class="hidden" type="checkbox" on:change={toggleTheme} bind:checked={$isDarkMode} />
 
     <!-- sun icon -->
     <svg class="swap-on size-7 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
