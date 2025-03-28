@@ -1,14 +1,21 @@
 <script lang="ts">
 	import { enhance } from "$app/forms";
-    import Header from "$lib/components/header.svelte";
+    import Navbar from "$lib/components/navbar.svelte";
+    import NavSectionDisplay from "$lib/components/navSectionDisplay.svelte";
+    import { navSection } from "$lib/store/navSectionStore";
 
 	import type { PageData, ActionData } from "./$types";
 
 	export let data: PageData;
 	export let form: ActionData;
+
+	// Changing storage to current navbar section
+	navSection.set("Settings");
 </script>
 
-<Header/>
+<Navbar/>
+<NavSectionDisplay/>
+
 <main>
 	<h1>Settings</h1>
 	<section>
@@ -47,6 +54,9 @@
 	{#if data.recoveryCode !== null}
 		<section>
 			<h1>Recovery code</h1>
+			<!-- Make this hidden with * so that nobody can see it at first.
+				Make it appear when clicked on it (eye symbol) - maybe request password.
+			-->
 			<p>Your recovery code is: {data.recoveryCode}</p>
 			<button>Generate new code</button>
 		</section>

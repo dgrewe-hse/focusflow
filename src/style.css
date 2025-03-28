@@ -1,9 +1,11 @@
 @import "tailwindcss";
 
 @plugin "daisyui";
+
 /* 
  * When editing new theme dont forget to change the names to 'focusflowLight' and 'focusflowDark' or edit the names in the theme controls.
  * Also set default allways to 'false' otherwise the styling wont update.
+ * 
 */
 
 @plugin "daisyui/theme" {

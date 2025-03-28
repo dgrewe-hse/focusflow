@@ -1,14 +1,20 @@
 <script lang="ts">
 	import Banner from "$lib/components/banner.svelte";
-	import Header from "$lib/components/header.svelte";
+	import Navbar from "$lib/components/navbar.svelte";
 	import {onMount} from "svelte";
 
 	import type {PageData} from "./$types";
+    import NavSectionDisplay from "$lib/components/navSectionDisplay.svelte";
+    import { navSection } from "$lib/store/navSectionStore";
 
 	export let data: PageData;
 
+	// Changing storage to current navbar section
+	navSection.set("Home");
+	
 	let firstLogin : boolean;
 	onMount(() => {
+		// Looking for first initialization
 		const isSessionInit = localStorage.getItem("SessionInitialized");
 		if(isSessionInit == null || isSessionInit == "false") {
 			localStorage.setItem("SessionInitialized", "true");
@@ -19,7 +25,8 @@
 	});
 </script>
 
-<Header/>
+<Navbar/>
+<NavSectionDisplay/>
 
 <main class="w-full">
 	{#if firstLogin === true}
