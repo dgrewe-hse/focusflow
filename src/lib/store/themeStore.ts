@@ -1,4 +1,4 @@
-import { writable } from "svelte/store";
+import {writable} from "svelte/store";
 
 // Ensure we are in the browser before accessing window
 const isBrowser = typeof window !== "undefined";
@@ -10,7 +10,7 @@ const savedIsDarkMode = isBrowser ? localStorage.getItem("isDarkMode") : null;
 
 // Set the default theme
 export const theme = writable(savedTheme || (prefersDark ? "focusflowDark" : "focusflowLight"));
-export const isDarkMode = writable((savedIsDarkMode != null ? (savedIsDarkMode == "true" ? true : false) : (prefersDark ? true : false)));
+export const isDarkMode = writable((savedIsDarkMode != null ? (savedIsDarkMode == "true") : (prefersDark)));
 
 // Apply theme only in the browser
 if (isBrowser) {
@@ -18,7 +18,7 @@ if (isBrowser) {
         localStorage.setItem("theme", value);
         document.documentElement.setAttribute("data-theme", value);
     });
-    isDarkMode.subscribe((value : boolean) => {
+    isDarkMode.subscribe((value: boolean) => {
         localStorage.setItem("isDarkMode", value ? "true" : "false");
         theme.set(value ? "focusflowDark" : "focusflowLight");
     });
