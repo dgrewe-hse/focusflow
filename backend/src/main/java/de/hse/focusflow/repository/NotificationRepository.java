@@ -3,6 +3,7 @@ package de.hse.focusflow.repository;
 import de.hse.focusflow.model.Notification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
@@ -30,8 +31,9 @@ public interface NotificationRepository extends JpaRepository<Notification, UUID
      * @param userId the ID of the user
      * @return list of unread notifications for the user
      */
-    @Query("SELECT n FROM Notification n WHERE n.user.id = :userId AND n.readAt IS NULL")
-    List<Notification> findUnreadByUserId(@Param("userId") UUID userId);
+    @Query("SELECT n FROM Notification n WHERE n.user.id = :userId AND n.readAt > :currentTime")
+    List<Notification> findUnreadByUserId(@Param("userId") UUID userId,
+            @Param("currentTime") LocalDateTime currentTime);
 
     /**
      * Find notifications related to a specific task
@@ -59,16 +61,17 @@ public interface NotificationRepository extends JpaRepository<Notification, UUID
      * @param userId the ID of the user
      * @return count of unread notifications
      */
-    @Query("SELECT COUNT(n) FROM Notification n WHERE n.user.id = :userId AND n.readAt IS NULL")
-    long countUnreadByUserId(@Param("userId") UUID userId);
+    @Query("SELECT COUNT(n) FROM Notification n WHERE n.user.id = :userId AND n.readAt > :currentTime")
+    long countUnreadByUserId(@Param("userId") UUID userId, @Param("currentTime") LocalDateTime currentTime);
 
     /**
-     * Mark notifications as read for a specific user
+     * Mark all unread notifications as read for a specific user
      * 
      * @param userId the ID of the user
-     * @param readAt the timestamp to set as read time
-     * @return number of affected rows
+     * @param readAt the timestamp when notifications were read
      */
-    @Query("UPDATE Notification n SET n.readAt = :readAt WHERE n.user.id = :userId AND n.readAt IS NULL")
-    int markAllAsRead(@Param("userId") UUID userId, @Param("readAt") LocalDateTime readAt);
+    @Modifying
+    @Query("UPDATE Notification n SET n.readAt = :readAt WHERE n.user.id = :userId AND n.readAt > :currentTime")
+    void markAllAsRead(@Param("userId") UUID userId, @Param("readAt") LocalDateTime readAt,
+            @Param("currentTime") LocalDateTime currentTime);
 }

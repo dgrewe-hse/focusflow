@@ -119,7 +119,8 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     public void markAllNotificationsAsRead(UUID userId) {
-        notificationRepository.markAllAsRead(userId, LocalDateTime.now());
+        LocalDateTime currentTime = LocalDateTime.now();
+        notificationRepository.markAllAsRead(userId, currentTime, currentTime);
     }
 
     @Override
@@ -132,6 +133,7 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     public long getUnreadNotificationCount(UUID userId) {
-        return notificationRepository.countUnreadByUserId(userId);
+        LocalDateTime currentTime = LocalDateTime.now();
+        return notificationRepository.countUnreadByUserId(userId, currentTime);
     }
 }

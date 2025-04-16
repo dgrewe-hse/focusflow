@@ -23,8 +23,11 @@ package de.hse.focusflow.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "roles")
@@ -33,9 +36,23 @@ import lombok.Setter;
 public class Role extends BaseEntity {
 
     @NotBlank
-    @Column(nullable = false, unique = true)
+    @Size(min = 2, max = 50)
+    @Column(nullable = false, length = 50, unique = true)
     private String name;
 
-    @Column
+    @Column(length = 500)
     private String description;
+
+    @ManyToMany(mappedBy = "roles")
+    private Set<User> users = new HashSet<>();
+
+    public void setName(String name) {
+        if (name == null || name.trim().isEmpty()) {
+            throw new IllegalArgumentException("Role name cannot be null or empty");
+        }
+        if (name.length() < 2 || name.length() > 50) {
+            throw new IllegalArgumentException("Role name must be between 2 and 50 characters");
+        }
+        this.name = name;
+    }
 }
