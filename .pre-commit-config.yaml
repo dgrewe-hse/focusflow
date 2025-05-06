@@ -1,0 +1,28 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-added-large-files
+      - id: check-json
+      - id: check-xml
+
+  - repo: local
+    hooks:
+      - id: maven-test
+        name: Maven Test
+        entry: bash -c 'cd backend && ./mvnw test'
+        language: system
+        types: [java]
+        pass_filenames: false
+        files: ^backend/src/.*\.java$
+
+      - id: maven-compile
+        name: Maven Compile
+        entry: bash -c 'cd backend && ./mvnw compile'
+        language: system
+        types: [java]
+        pass_filenames: false
+        files: ^backend/src/.*\.java$
