@@ -30,6 +30,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.regex.Pattern;
@@ -69,6 +70,24 @@ public class UserServiceImpl implements UserService {
         user.setPassword(passwordEncoder.encode(password));
         user.setFirstName(""); // Default empty first name
         user.setLastName(""); // Default empty last name
+
+        return userRepository.save(user);
+    }
+
+    @Override
+    public User createUser(String email, String password, String firstName, String lastName) {
+        validateEmail(email);
+        validatePassword(password);
+
+        if (userRepository.findByEmail(email).isPresent()) {
+            throw new IllegalArgumentException("Email already registered");
+        }
+
+        User user = new User();
+        user.setEmail(email);
+        user.setPassword(passwordEncoder.encode(password));
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
 
         return userRepository.save(user);
     }
@@ -131,6 +150,23 @@ public class UserServiceImpl implements UserService {
         }
 
         throw new RuntimeException("User is not a member of this team");
+    }
+
+    @Override
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
+    }
+
+    @Override
+    public List<User> findUsersByName(String name) {
+        return userRepository.findByName(name);
+    }
+
+    @Override
+    public List<User> findUsersByTeamId(UUID teamId) {
+        Team team = teamRepository.findById(teamId)
+                .orElseThrow(() -> new RuntimeException("Team not found"));
+        return new ArrayList<>(team.getMembers());
     }
 
     private void validateEmail(String email) {

@@ -23,6 +23,10 @@ package de.hse.focusflow.service;
 
 import de.hse.focusflow.model.User;
 import de.hse.focusflow.model.Team;
+import de.hse.focusflow.repository.UserRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -41,6 +45,18 @@ public interface UserService {
      * @throws IllegalArgumentException If validation fails
      */
     User registerUser(String email, String password);
+
+    /**
+     * Create a new user with full details
+     *
+     * @param email     User's email
+     * @param password  User's password
+     * @param firstName User's first name
+     * @param lastName  User's last name
+     * @return The created user
+     * @throws IllegalArgumentException If validation fails
+     */
+    User createUser(String email, String password, String firstName, String lastName);
 
     /**
      * Authenticate a user
@@ -99,78 +115,25 @@ public interface UserService {
     String getUserRoleInTeam(UUID userId, UUID teamId);
 
     /**
-     * Data Transfer Object for User registration and updates
+     * Get all users
+     *
+     * @return List of all users
      */
-    class UserDTO {
-        private String email;
-        private String password;
-        private String firstName;
-        private String lastName;
+    List<User> getAllUsers();
 
-        // Default constructor
-        public UserDTO() {
-        }
+    /**
+     * Find users by name
+     *
+     * @param name Name to search for
+     * @return List of users matching the name
+     */
+    List<User> findUsersByName(String name);
 
-        // Getters and Setters
-        public String getEmail() {
-            return email;
-        }
-
-        public void setEmail(String email) {
-            this.email = email;
-        }
-
-        public String getPassword() {
-            return password;
-        }
-
-        public void setPassword(String password) {
-            this.password = password;
-        }
-
-        public String getFirstName() {
-            return firstName;
-        }
-
-        public void setFirstName(String firstName) {
-            this.firstName = firstName;
-        }
-
-        public String getLastName() {
-            return lastName;
-        }
-
-        public void setLastName(String lastName) {
-            this.lastName = lastName;
-        }
-
-        // Builder for fluent API
-        public static class Builder {
-            private final UserDTO dto = new UserDTO();
-
-            public Builder withEmail(String email) {
-                dto.email = email;
-                return this;
-            }
-
-            public Builder withPassword(String password) {
-                dto.password = password;
-                return this;
-            }
-
-            public Builder withFirstName(String firstName) {
-                dto.firstName = firstName;
-                return this;
-            }
-
-            public Builder withLastName(String lastName) {
-                dto.lastName = lastName;
-                return this;
-            }
-
-            public UserDTO build() {
-                return dto;
-            }
-        }
-    }
+    /**
+     * Find users by team ID
+     *
+     * @param teamId ID of the team
+     * @return List of users in the team
+     */
+    List<User> findUsersByTeamId(UUID teamId);
 }
