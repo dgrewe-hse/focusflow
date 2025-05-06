@@ -1,14 +1,19 @@
 name: Backend CI
 
+# Controls when the workflow will run
 on:
+  # Triggers the workflow on push or pull request events but only for the "main" branch
   push:
-    branches: [main, dev]
+    branches: [dev]
     paths:
       - "backend/**"
   pull_request:
-    branches: [main, dev]
+    branches: [main]
     paths:
       - "backend/**"
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
 
 jobs:
   build:
