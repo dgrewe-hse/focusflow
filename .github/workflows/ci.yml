@@ -1,72 +1,32 @@
-# This workflow runs the CI pipeline for the backend application
-name: Backend CI
+# name of the CI workflow pipeline
+name: SWT CI Workflow
 
-# Controls when the workflow will run
+# describe the trigger
 on:
-  # This workflow will run on the dev branch only
   push:
     branches: "**"
   pull_request:
     branches: [main]
 
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
-
+# jobs definitions after trigger occurs
 jobs:
-  # First job: Run all tests
+  # first job shall be testing
   test:
-    # Specifies the environment where the job will run
     runs-on: ubuntu-latest
-
     steps:
-      # Step 1: Checkout the code
+      # 1st step: checkout code from git
       - uses: actions/checkout@v4
-
-      # Step 2: Set up Java environment
-      - name: Set up JDK 17
+      # 2nd step: setup Java environment
+      - name: Set up JDK
         uses: actions/setup-java@v4
         with:
           java-version: "17"
           distribution: "temurin"
-          # Enable Maven dependency caching to speed up builds
+          # enabling maven caching dependencies
           cache: "maven"
           cache-dependency-path: "backend/pom.xml"
-
-      # Step 3: Run the test suite
+      # 3rd step: run tests using maven
       - name: Run Tests
         working-directory: backend
         run: |
           ./mvnw test
-
-  # Second job: Build the application
-  # This job will only run if the test job succeeds
-  build:
-    # Specify that this job depends on the test job
-    needs: test
-    runs-on: ubuntu-latest
-
-    steps:
-      # Step 1: Checkout the code
-      - uses: actions/checkout@v4
-
-      # Step 2: Set up Java environment
-      - name: Set up JDK 17
-        uses: actions/setup-java@v4
-        with:
-          java-version: "17"
-          distribution: "temurin"
-          # Enable Maven dependency caching to speed up builds
-          cache: "maven"
-          cache-dependency-path: "backend/pom.xml"
-
-      # Step 3: Build and verify the application
-      # This step will:
-      # - Clean previous build artifacts
-      # - Compile the code
-      # - Run tests again
-      # - Generate code coverage reports
-      # - Package the application
-      - name: Build with Maven
-        working-directory: backend
-        run: |
-          ./mvnw clean verify
