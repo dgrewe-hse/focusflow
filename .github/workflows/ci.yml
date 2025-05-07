@@ -30,3 +30,23 @@ jobs:
         working-directory: backend
         run: |
           ./mvnw test
+  build:
+    # build only runs when test successes
+    needs: test
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1st step: checkout code from git
+      - uses: actions/checkout@v4
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: "17"
+          distribution: "temurin"
+          # enabling maven caching dependencies
+          cache: "maven"
+          cache-dependency-path: "backend/pom.xml"
+      - name: Build with Maven
+        working-directory: backend
+        run: |
+          ./mvnw clean verify package
