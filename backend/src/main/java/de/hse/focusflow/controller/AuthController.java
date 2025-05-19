@@ -40,7 +40,10 @@ public class AuthController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String token = tokenProvider.generateToken(authentication);
 
-        return ResponseEntity.ok(new AuthDTO.LoginResponse(token, loginRequest.getEmail()));
+        // Get user ID from the user service
+        String userId = userService.getUserByEmail(loginRequest.getEmail()).getId().toString();
+
+        return ResponseEntity.ok(new AuthDTO.LoginResponse(token, loginRequest.getEmail(), userId));
     }
 
     @PostMapping("/register")
@@ -60,6 +63,9 @@ public class AuthController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String token = tokenProvider.generateToken(authentication);
 
-        return ResponseEntity.ok(new AuthDTO.LoginResponse(token, registerRequest.getEmail()));
+        // Get user ID from the user service
+        String userId = userService.getUserByEmail(registerRequest.getEmail()).getId().toString();
+
+        return ResponseEntity.ok(new AuthDTO.LoginResponse(token, registerRequest.getEmail(), userId));
     }
 }

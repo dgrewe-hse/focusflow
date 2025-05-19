@@ -30,28 +30,47 @@ import lombok.Setter;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Represents a Team entity in the application.
+ */
 @Entity
 @Table(name = "teams")
 @Getter
 @Setter
 public class Team extends BaseEntity {
 
+    /**
+     * The team's name
+     */
     @NotBlank
-    @Size(min = 2, max = 50)
-    @Column(nullable = false, length = 50)
+    @Size(min = 2, max = 100)
+    @Column(nullable = false, length = 100)
     private String name;
 
-    @Column(length = 500)
+    /**
+     * The team's description
+     */
+    @Size(max = 255)
+    @Column(length = 255)
     private String description;
 
+    /**
+     * The team lead/manager
+     */
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "team_lead_id", nullable = false)
+    @JoinColumn(name = "teamLeadId", nullable = false)
     private User teamLead;
 
-    @ManyToMany
-    @JoinTable(name = "team_members", joinColumns = @JoinColumn(name = "team_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
-    private Set<User> members = new HashSet<>();
-
+    /**
+     * Tasks assigned to this team
+     */
     @OneToMany(mappedBy = "team")
     private Set<Task> tasks = new HashSet<>();
+
+    /**
+     * Members of this team
+     */
+    @ManyToMany
+    @JoinTable(name = "team_members", joinColumns = @JoinColumn(name = "teamId"), inverseJoinColumns = @JoinColumn(name = "userId"))
+    private Set<User> members = new HashSet<>();
 }

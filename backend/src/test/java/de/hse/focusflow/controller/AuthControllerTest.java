@@ -21,82 +21,94 @@ import org.springframework.security.core.Authentication;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.UUID;
+
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(AuthController.class)
+@WebMvcTest(controllers = AuthController.class)
 @Import({ TestConfig.class, TestSecurityConfig.class })
 @ActiveProfiles("test")
 class AuthControllerTest {
 
-    @Autowired
-    private MockMvc mockMvc;
+        @Autowired
+        private MockMvc mockMvc;
 
-    @MockBean
-    private AuthenticationManager authenticationManager;
+        @MockBean
+        private AuthenticationManager authenticationManager;
 
-    @MockBean
-    private JwtTokenProvider tokenProvider;
+        @MockBean
+        private JwtTokenProvider tokenProvider;
 
-    @MockBean
-    private UserService userService;
+        @MockBean
+        private UserService userService;
 
-    @Autowired
-    private ObjectMapper objectMapper;
+        @Autowired
+        private ObjectMapper objectMapper;
 
-    private AuthDTO.LoginRequest validLoginRequest;
-    private AuthDTO.RegisterRequest validRegisterRequest;
-    private Authentication authentication;
-    private User testUser;
+        private AuthDTO.LoginRequest validLoginRequest;
+        private AuthDTO.RegisterRequest validRegisterRequest;
+        private Authentication authentication;
+        private User testUser;
+        private final UUID TEST_USER_ID = UUID.randomUUID();
 
-    @BeforeEach
-    void setUp() {
-        validLoginRequest = new AuthDTO.LoginRequest();
-        validLoginRequest.setEmail("test@example.com");
-        validLoginRequest.setPassword("password");
+        @BeforeEach
+        void setUp() {
+                validLoginRequest = new AuthDTO.LoginRequest();
+                validLoginRequest.setEmail("test@example.com");
+                validLoginRequest.setPassword("password");
 
-        validRegisterRequest = new AuthDTO.RegisterRequest();
-        validRegisterRequest.setEmail("test@example.com");
-        validRegisterRequest.setPassword("password");
-        validRegisterRequest.setFirstName("Test");
-        validRegisterRequest.setLastName("User");
+                validRegisterRequest = new AuthDTO.RegisterRequest();
+                validRegisterRequest.setEmail("test@example.com");
+                validRegisterRequest.setPassword("password");
+                validRegisterRequest.setFirstName("Test");
+                validRegisterRequest.setLastName("User");
 
-        testUser = new User();
-        testUser.setEmail("test@example.com");
-        testUser.setFirstName("Test");
-        testUser.setLastName("User");
+                testUser = new User();
+                testUser.setId(TEST_USER_ID);
+                testUser.setEmail("test@example.com");
+                testUser.setFirstName("Test");
+                testUser.setLastName("User");
+                testUser.setPassword("encodedPassword");
 
-        authentication = new UsernamePasswordAuthenticationToken(
-                "test@example.com", "password");
+                authentication = new UsernamePasswordAuthenticationToken(
+                                "test@example.com", "password");
 
-        when(authenticationManager.authenticate(any(Authentication.class)))
-                .thenReturn(authentication);
-        when(tokenProvider.generateToken(any(Authentication.class)))
-                .thenReturn("test.token.value");
-        when(userService.createUser(any(), any(), any(), any()))
-                .thenReturn(testUser);
-    }
+                // Use doReturn...when instead of when...thenReturn to avoid actual method calls
+                doReturn(authentication)
+                                .when(authenticationManager).authenticate(any(Authentication.class));
+                doReturn("test.token.value")
+                                .when(tokenProvider).generateToken(any(Authentication.class));
+                doReturn(testUser)
+                                .when(userService).createUser(anyString(), anyString(), anyString(), anyString());
+                doReturn(testUser)
+                                .when(userService).getUserByEmail(anyString());
+        }
 
-    @Test
-    void loginSuccess() throws Exception {
-        mockMvc.perform(post("/api/v1/auth/login")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(validLoginRequest)))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.token").isNotEmpty())
-                .andExpect(jsonPath("$.email").value(validLoginRequest.getEmail()));
-    }
+        @Test
+        void loginSuccess() throws Exception {
+                mockMvc.perform(post("/api/v1/auth/login")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(validLoginRequest)))
+                                .andExpect(status().isOk())
+                                .andExpect(jsonPath("$.token").value("test.token.value"))
+                                .andExpect(jsonPath("$.email").value(validLoginRequest.getEmail()))
+                                .andExpect(jsonPath("$.userId").value(TEST_USER_ID.toString()));
+        }
 
-    @Test
-    void registerSuccess() throws Exception {
-        mockMvc.perform(post("/api/v1/auth/register")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(validRegisterRequest)))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.token").isNotEmpty())
-                .andExpect(jsonPath("$.email").value(validRegisterRequest.getEmail()));
-    }
+        @Test
+        void registerSuccess() throws Exception {
+                mockMvc.perform(post("/api/v1/auth/register")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(validRegisterRequest)))
+                                .andExpect(status().isOk())
+                                .andExpect(jsonPath("$.token").value("test.token.value"))
+                                .andExpect(jsonPath("$.email").value(validRegisterRequest.getEmail()))
+                                .andExpect(jsonPath("$.userId").value(TEST_USER_ID.toString()));
+        }
 }

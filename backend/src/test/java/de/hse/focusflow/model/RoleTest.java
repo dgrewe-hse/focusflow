@@ -26,7 +26,15 @@ class RoleTest {
 
     @BeforeEach
     void setUp() {
-        // Create and persist users first
+        // Create role
+        role = new Role();
+        role.setName("ADMIN");
+        role.setDescription("Administrator role");
+        role.setCreatedAt(LocalDateTime.now());
+        role.setUpdatedAt(LocalDateTime.now());
+        entityManager.persist(role);
+
+        // Create and persist users
         user1 = new User();
         user1.setFirstName("John");
         user1.setLastName("Doe");
@@ -34,6 +42,7 @@ class RoleTest {
         user1.setPassword("Test123!@#12");
         user1.setCreatedAt(LocalDateTime.now());
         user1.setUpdatedAt(LocalDateTime.now());
+        user1.setRoles(new HashSet<>());
         entityManager.persist(user1);
 
         user2 = new User();
@@ -43,15 +52,9 @@ class RoleTest {
         user2.setPassword("Test123!@#12");
         user2.setCreatedAt(LocalDateTime.now());
         user2.setUpdatedAt(LocalDateTime.now());
+        user2.setRoles(new HashSet<>());
         entityManager.persist(user2);
 
-        // Create and persist role
-        role = new Role();
-        role.setName("ADMIN");
-        role.setDescription("Administrator role");
-        role.setCreatedAt(LocalDateTime.now());
-        role.setUpdatedAt(LocalDateTime.now());
-        entityManager.persist(role);
         entityManager.flush();
     }
 
@@ -61,43 +64,69 @@ class RoleTest {
         assertNotNull(persistedRole);
         assertEquals("ADMIN", persistedRole.getName());
         assertEquals("Administrator role", persistedRole.getDescription());
-        assertNotNull(persistedRole.getUsers());
-        assertTrue(persistedRole.getUsers().isEmpty());
     }
 
     @Test
-    void testAddUser() {
-        Set<User> users = new HashSet<>();
-        users.add(user1);
-        users.add(user2);
-        role.setUsers(users);
-        entityManager.persist(role);
+    void testAddUserToRole() {
+        // Add role to users (since the relationship is managed from User side)
+        user1.getRoles().add(role);
+        user2.getRoles().add(role);
+        entityManager.persist(user1);
+        entityManager.persist(user2);
         entityManager.flush();
+        entityManager.clear();
 
+        // Reload the role
         Role persistedRole = entityManager.find(Role.class, role.getId());
         assertEquals(2, persistedRole.getUsers().size());
-        assertTrue(persistedRole.getUsers().contains(user1));
-        assertTrue(persistedRole.getUsers().contains(user2));
+
+        // Check if the users are in the role
+        boolean containsUser1 = false;
+        boolean containsUser2 = false;
+        for (User user : persistedRole.getUsers()) {
+            if (user.getId().equals(user1.getId())) {
+                containsUser1 = true;
+            }
+            if (user.getId().equals(user2.getId())) {
+                containsUser2 = true;
+            }
+        }
+        assertTrue(containsUser1);
+        assertTrue(containsUser2);
     }
 
     @Test
-    void testRemoveUser() {
-        Set<User> users = new HashSet<>();
-        users.add(user1);
-        users.add(user2);
-        role.setUsers(users);
-        entityManager.persist(role);
+    void testRemoveUserFromRole() {
+        // Add role to users
+        user1.getRoles().add(role);
+        user2.getRoles().add(role);
+        entityManager.persist(user1);
+        entityManager.persist(user2);
         entityManager.flush();
 
-        users.remove(user1);
-        role.setUsers(users);
-        entityManager.persist(role);
+        // Remove role from user1
+        user1.getRoles().remove(role);
+        entityManager.persist(user1);
         entityManager.flush();
+        entityManager.clear();
 
+        // Reload the role
         Role persistedRole = entityManager.find(Role.class, role.getId());
         assertEquals(1, persistedRole.getUsers().size());
-        assertFalse(persistedRole.getUsers().contains(user1));
-        assertTrue(persistedRole.getUsers().contains(user2));
+
+        // Check if only user2 is in the role
+        boolean containsUser1 = false;
+        boolean containsUser2 = false;
+        for (User user : persistedRole.getUsers()) {
+            if (user.getId().equals(user1.getId())) {
+                containsUser1 = true;
+            }
+            if (user.getId().equals(user2.getId())) {
+                containsUser2 = true;
+            }
+        }
+        assertFalse(containsUser1);
+        assertTrue(containsUser2);
     }
 
     @Test

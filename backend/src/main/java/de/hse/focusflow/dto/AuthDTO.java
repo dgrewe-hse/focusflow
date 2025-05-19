@@ -35,10 +35,17 @@ public class AuthDTO {
     public static class LoginResponse {
         private String token;
         private String email;
+        private String userId;
 
         public LoginResponse(String token, String email) {
             this.token = token;
             this.email = email;
+        }
+
+        public LoginResponse(String token, String email, String userId) {
+            this.token = token;
+            this.email = email;
+            this.userId = userId;
         }
 
         // Getters and Setters
@@ -57,6 +64,14 @@ public class AuthDTO {
         public void setEmail(String email) {
             this.email = email;
         }
+
+        public String getUserId() {
+            return userId;
+        }
+
+        public void setUserId(String userId) {
+            this.userId = userId;
+        }
     }
 
     public static class RegisterRequest {
@@ -65,7 +80,6 @@ public class AuthDTO {
         private String email;
 
         @NotBlank(message = "Password is required")
-        @Size(min = 6, message = "Password must be at least 6 characters long")
         private String password;
 
         @NotBlank(message = "First name is required")

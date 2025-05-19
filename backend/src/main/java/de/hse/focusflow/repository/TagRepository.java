@@ -18,24 +18,24 @@ public interface TagRepository extends JpaRepository<Tag, UUID> {
 
     /**
      * Find a tag by its name (exact match)
-     * 
+     *
      * @param name the tag name to search for
      * @return an Optional containing the tag if found
      */
     Optional<Tag> findByName(String name);
 
     /**
-     * Find tags by name (partial match, case insensitive)
-     * 
+     * Find tags by name (partial match)
+     *
      * @param name the name to search for
      * @return list of tags matching the search
      */
-    @Query("SELECT t FROM Tag t WHERE LOWER(t.name) LIKE LOWER(CONCAT('%', :name, '%'))")
+    @Query("SELECT t FROM Tag t WHERE t.name LIKE CONCAT('%', :name, '%')")
     List<Tag> findByNameContaining(@Param("name") String name);
 
     /**
      * Check if a tag with the given name exists
-     * 
+     *
      * @param name the tag name to check
      * @return true if a tag with the name exists
      */
@@ -43,7 +43,7 @@ public interface TagRepository extends JpaRepository<Tag, UUID> {
 
     /**
      * Find all tags used in tasks assigned to a specific user
-     * 
+     *
      * @param userId the ID of the user
      * @return list of tags used in the user's tasks
      */
@@ -52,7 +52,7 @@ public interface TagRepository extends JpaRepository<Tag, UUID> {
 
     /**
      * Find all tags used in tasks assigned to a specific team
-     * 
+     *
      * @param teamId the ID of the team
      * @return list of tags used in the team's tasks
      */
@@ -61,7 +61,7 @@ public interface TagRepository extends JpaRepository<Tag, UUID> {
 
     /**
      * Count the number of tasks using each tag
-     * 
+     *
      * @return list of tag name and count pairs
      */
     @Query("SELECT t.name, COUNT(task) FROM Tag t JOIN t.tasks task GROUP BY t.name ORDER BY COUNT(task) DESC")

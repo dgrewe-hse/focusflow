@@ -18,7 +18,7 @@ public interface TeamRepository extends JpaRepository<Team, UUID> {
 
     /**
      * Find a team by its name
-     * 
+     *
      * @param name the team name to search for
      * @return an Optional containing the team if found
      */
@@ -26,7 +26,7 @@ public interface TeamRepository extends JpaRepository<Team, UUID> {
 
     /**
      * Check if a team with the given name exists
-     * 
+     *
      * @param name the team name to check
      * @return true if a team with the name exists
      */
@@ -34,7 +34,7 @@ public interface TeamRepository extends JpaRepository<Team, UUID> {
 
     /**
      * Find all teams led by a specific user
-     * 
+     *
      * @param teamLeadId the ID of the team lead
      * @return list of teams led by the user
      */
@@ -42,7 +42,7 @@ public interface TeamRepository extends JpaRepository<Team, UUID> {
 
     /**
      * Find all teams that a user is a member of
-     * 
+     *
      * @param userId the ID of the user
      * @return list of teams the user is a member of
      */
@@ -51,10 +51,10 @@ public interface TeamRepository extends JpaRepository<Team, UUID> {
 
     /**
      * Find teams by name (partial match)
-     * 
+     *
      * @param name the name to search for
      * @return list of teams matching the search
      */
-    @Query("SELECT t FROM Team t WHERE LOWER(t.name) LIKE LOWER(CONCAT('%', :name, '%'))")
+    @Query("SELECT t FROM Team t WHERE t.name LIKE CONCAT('%', :name, '%')")
     List<Team> findByNameContaining(@Param("name") String name);
 }

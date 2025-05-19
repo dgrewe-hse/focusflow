@@ -45,7 +45,7 @@ public class UserServiceImpl implements UserService {
 
     // Password validation pattern
     private static final Pattern PASSWORD_PATTERN = Pattern.compile(
-            "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{10,12}$");
+            "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$");
 
     public UserServiceImpl(
             UserRepository userRepository,
@@ -185,7 +185,7 @@ public class UserServiceImpl implements UserService {
         }
         if (!PASSWORD_PATTERN.matcher(password).matches()) {
             throw new IllegalArgumentException(
-                    "Password must be 10-12 characters long, contain at least one digit, " +
+                    "Password must be at least 8 characters long and contain at least one digit, " +
                             "one lowercase letter, one uppercase letter, and one special character");
         }
     }

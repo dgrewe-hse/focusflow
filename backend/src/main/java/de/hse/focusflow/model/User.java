@@ -53,8 +53,7 @@ public class User extends BaseEntity {
     private String email;
 
     @NotBlank
-    @Size(min = 10, max = 12)
-    @Column(nullable = false)
+    @Column(nullable = false, length = 255)
     private String password;
 
     @ManyToMany(mappedBy = "members")
@@ -69,7 +68,7 @@ public class User extends BaseEntity {
     @OneToMany(mappedBy = "user")
     private Set<Notification> notifications = new HashSet<>();
 
-    @ManyToMany
-    @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "userId"), inverseJoinColumns = @JoinColumn(name = "roleId"))
     private Set<Role> roles = new HashSet<>();
 }

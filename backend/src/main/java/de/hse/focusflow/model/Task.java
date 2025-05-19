@@ -66,18 +66,18 @@ public class Task extends BaseEntity {
     private TaskStatus status = TaskStatus.OPEN;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "assignee_id")
+    @JoinColumn(name = "assigneeId")
     private User assignee;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "team_id")
+    @JoinColumn(name = "teamId")
     private Team team;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "created_by_id", nullable = false)
+    @JoinColumn(name = "createdById", nullable = false)
     private User createdBy;
 
     @ManyToMany
-    @JoinTable(name = "task_tags", joinColumns = @JoinColumn(name = "task_id"), inverseJoinColumns = @JoinColumn(name = "tag_id"))
+    @JoinTable(name = "task_tags", joinColumns = @JoinColumn(name = "taskId"), inverseJoinColumns = @JoinColumn(name = "tagId"))
     private Set<Tag> tags = new HashSet<>();
 }

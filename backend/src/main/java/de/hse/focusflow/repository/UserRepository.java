@@ -18,7 +18,7 @@ public interface UserRepository extends JpaRepository<User, UUID> {
 
     /**
      * Find a user by their email address
-     * 
+     *
      * @param email the email to search for
      * @return an Optional containing the user if found
      */
@@ -26,7 +26,7 @@ public interface UserRepository extends JpaRepository<User, UUID> {
 
     /**
      * Check if a user with the given email exists
-     * 
+     *
      * @param email the email to check
      * @return true if a user with the email exists
      */
@@ -34,7 +34,7 @@ public interface UserRepository extends JpaRepository<User, UUID> {
 
     /**
      * Find all users who are members of a specific team
-     * 
+     *
      * @param teamId the ID of the team
      * @return list of users who are members of the team
      */
@@ -43,10 +43,10 @@ public interface UserRepository extends JpaRepository<User, UUID> {
 
     /**
      * Find users by name (partial match on first or last name)
-     * 
+     *
      * @param name the name to search for
      * @return list of users matching the search
      */
-    @Query("SELECT u FROM User u WHERE LOWER(u.firstName) LIKE LOWER(CONCAT('%', :name, '%')) OR LOWER(u.lastName) LIKE LOWER(CONCAT('%', :name, '%'))")
+    @Query("SELECT u FROM User u WHERE u.firstName LIKE CONCAT('%', :name, '%') OR u.lastName LIKE CONCAT('%', :name, '%')")
     List<User> findByName(@Param("name") String name);
 }
