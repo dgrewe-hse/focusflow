@@ -10,7 +10,6 @@ import org.springframework.test.context.ActiveProfiles;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.HashSet;
-import java.util.Set;
 import java.time.LocalDateTime;
 
 @DataJpaTest

@@ -174,7 +174,6 @@ class NotificationServiceImplTest {
     @Test
     void markAllNotificationsAsRead_ShouldUpdateAllNotifications() {
         // Arrange
-        LocalDateTime currentTime = LocalDateTime.now();
         doNothing().when(notificationRepository).markAllAsRead(any(UUID.class), any(LocalDateTime.class),
                 any(LocalDateTime.class));
 
@@ -202,7 +201,6 @@ class NotificationServiceImplTest {
     @Test
     void getUnreadNotificationCount_ShouldReturnCorrectCount() {
         // Arrange
-        LocalDateTime currentTime = LocalDateTime.now();
         when(notificationRepository.countUnreadByUserId(any(UUID.class), any(LocalDateTime.class)))
                 .thenReturn(5L);
 

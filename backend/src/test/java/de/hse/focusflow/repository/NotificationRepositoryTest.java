@@ -13,7 +13,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.time.ZoneOffset;
 
 import static org.junit.jupiter.api.Assertions.*;
 

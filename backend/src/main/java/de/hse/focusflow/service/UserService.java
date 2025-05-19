@@ -23,10 +23,6 @@ package de.hse.focusflow.service;
 
 import de.hse.focusflow.model.User;
 import de.hse.focusflow.model.Team;
-import de.hse.focusflow.repository.UserRepository;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
