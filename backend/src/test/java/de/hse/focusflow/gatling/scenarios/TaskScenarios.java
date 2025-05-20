@@ -22,9 +22,7 @@
 package de.hse.focusflow.gatling.scenarios;
 
 import io.gatling.javaapi.core.ChainBuilder;
-import io.gatling.javaapi.core.FeederBuilder;
 import io.gatling.javaapi.core.ScenarioBuilder;
-import io.gatling.javaapi.http.HttpDsl;
 
 import static io.gatling.javaapi.core.CoreDsl.*;
 import static io.gatling.javaapi.http.HttpDsl.http;
@@ -34,13 +32,8 @@ import de.hse.focusflow.gatling.utils.Authentication;
 import de.hse.focusflow.gatling.utils.Configuration;
 import de.hse.focusflow.gatling.utils.TestData;
 
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.function.Supplier;
-import java.util.stream.Stream;
 
 /**
  * Reusable Gatling scenarios for testing TaskController endpoints.

@@ -23,10 +23,8 @@ package de.hse.focusflow.gatling.utils;
 
 import io.gatling.javaapi.core.ChainBuilder;
 import io.gatling.javaapi.core.Session;
-import io.gatling.javaapi.http.HttpDsl;
 
 import static io.gatling.javaapi.core.CoreDsl.*;
-import static io.gatling.javaapi.http.HttpDsl.status;
 
 /**
  * Authentication utilities for Gatling load tests.
