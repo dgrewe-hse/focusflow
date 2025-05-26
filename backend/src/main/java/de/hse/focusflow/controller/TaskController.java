@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,11 +41,55 @@ public class TaskController {
   private TaskService taskService;
 
   /**
-   * Maps Task entity to TaskDTO
+   * Maps a Task entity to TaskDTO
+   * Handles lazy loading exceptions gracefully
    */
   private TaskDTO mapToDTO(Task task) {
     if (task == null) {
       return null;
+    }
+
+    // Safely handle tags collection to avoid LazyInitializationException
+    Set<UUID> tagIds = null;
+    try {
+      if (task.getTags() != null) {
+        tagIds = task.getTags().stream()
+            .map(tag -> tag.getId())
+            .collect(Collectors.toSet());
+      }
+    } catch (org.hibernate.LazyInitializationException e) {
+      // Log the exception and continue with null tagIds
+      System.out.println("Warning: Could not load tags for task " + task.getId() + " - LazyInitializationException");
+      tagIds = null;
+    }
+
+    // Safely handle assignee relationship
+    UUID assigneeId = null;
+    try {
+      assigneeId = task.getAssignee() != null ? task.getAssignee().getId() : null;
+    } catch (org.hibernate.LazyInitializationException e) {
+      System.out
+          .println("Warning: Could not load assignee for task " + task.getId() + " - LazyInitializationException");
+      assigneeId = null;
+    }
+
+    // Safely handle team relationship
+    UUID teamId = null;
+    try {
+      teamId = task.getTeam() != null ? task.getTeam().getId() : null;
+    } catch (org.hibernate.LazyInitializationException e) {
+      System.out.println("Warning: Could not load team for task " + task.getId() + " - LazyInitializationException");
+      teamId = null;
+    }
+
+    // Safely handle createdBy relationship
+    UUID createdById = null;
+    try {
+      createdById = task.getCreatedBy() != null ? task.getCreatedBy().getId() : null;
+    } catch (org.hibernate.LazyInitializationException e) {
+      System.out
+          .println("Warning: Could not load createdBy for task " + task.getId() + " - LazyInitializationException");
+      createdById = null;
     }
 
     return TaskDTO.builder()
@@ -55,11 +100,10 @@ public class TaskController {
         .dueDate(task.getDueDate())
         .priority(task.getPriority())
         .status(task.getStatus())
-        .assigneeId(task.getAssignee() != null ? task.getAssignee().getId() : null)
-        .teamId(task.getTeam() != null ? task.getTeam().getId() : null)
-        .createdById(task.getCreatedBy() != null ? task.getCreatedBy().getId() : null)
-        .tagIds(
-            task.getTags() != null ? task.getTags().stream().map(tag -> tag.getId()).collect(Collectors.toSet()) : null)
+        .assigneeId(assigneeId)
+        .teamId(teamId)
+        .createdById(createdById)
+        .tagIds(tagIds)
         .build();
   }
 
