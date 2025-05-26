@@ -14,10 +14,9 @@ RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
     && apt-get install -y nodejs \
     && npm install -g npm@latest \
     && npm install -g @vue/cli@latest \
-    && npm install -g vite@latest \
-    && npm install -g cypress
+    && npm install -g vite@latest
 
-# Install additional tools
+# Install Cypress dependencies and additional tools
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     && apt-get -y install --no-install-recommends \
     curl \
@@ -29,7 +28,31 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     vim \
     postgresql-client \
     python3 \
-    python3-pip
+    python3-pip \
+    xvfb \
+    libgtk2.0-0 \
+    libgtk-3-0 \
+    libgbm-dev \
+    libnotify-dev \
+    libgconf-2-4 \
+    libnss3 \
+    libxss1 \
+    libasound2 \
+    libxtst6 \
+    xauth \
+    libatk1.0-0 \
+    libatk-bridge2.0-0 \
+    libdrm2 \
+    libxcomposite1 \
+    libxdamage1 \
+    libxrandr2 \
+    libgbm1 \
+    libxkbcommon0 \
+    libatspi2.0-0 \
+    libdrm-common \
+    libxfixes3 \
+    libxcursor1 \
+    libxi6
 
 # Clean up
 RUN apt-get autoremove -y \
@@ -57,6 +80,10 @@ RUN mkdir -p /home/vscode/.npm-global \
 # Set npm global directory for vscode user
 ENV NPM_CONFIG_PREFIX=/home/vscode/.npm-global
 ENV PATH=/home/vscode/.npm-global/bin:$PATH
+
+# Cypress configuration for headless environment
+ENV DISPLAY=:99
+ENV CYPRESS_CACHE_FOLDER=/home/vscode/.cache/Cypress
 
 # Set up workspace directory
 WORKDIR /workspace

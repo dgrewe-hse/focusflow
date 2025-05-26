@@ -11,13 +11,16 @@
     "serve": "vite --port 8081",
     "build": "vite build",
     "preview": "vite preview",
-    "test": "cypress open"
+    "test": "./cypress-runner.sh open",
+    "test:headless": "./cypress-runner.sh run",
+    "test:auth": "npx cypress run --spec 'cypress/e2e/auth/**'",
+    "test:e2e": "npx cypress run --spec 'cypress/e2e/e2e/**'",
+    "test:tasks": "npx cypress run --spec 'cypress/e2e/tasks/**'"
   },
   "dependencies": {
     "@mdi/font": "^7.4.47",
     "@vue/cli": "^4.2.2",
     "axios": "^1.6.7",
-    "cypress": "13.16.0",
     "material-design-icons-iconfont": "^6.1.0",
     "vue": "^3.5.13",
     "vue-router": "^4.2.5",
@@ -26,6 +29,7 @@
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.0.0",
     "@vue/cli-service": "^5.0.8",
+    "cypress": "^14.4.0",
     "vite": "^6.3.5"
   }
 }
