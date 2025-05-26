@@ -80,10 +80,16 @@
                   variant="text"
                   @click="goBack"
                   class="mr-2"
+                  data-cy="cancel-task-button"
                 >
                   Cancel
                 </v-btn>
-                <v-btn color="primary" type="submit" :loading="loading">
+                <v-btn
+                  color="primary"
+                  type="submit"
+                  :loading="loading"
+                  data-cy="create-task-button"
+                >
                   Create Task
                 </v-btn>
               </v-card-actions>

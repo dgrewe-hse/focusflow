@@ -15,6 +15,7 @@
             prepend-icon="mdi-logout"
             @click="handleLogout"
             class="ml-4"
+            data-cy="logout-button"
           >
             Logout
           </v-btn>
@@ -33,6 +34,7 @@
           variant="elevated"
           prepend-icon="mdi-plus"
           @click="createTask"
+          data-cy="create-task-button"
         >
           CREATE NEW TASK
         </v-btn>
@@ -47,12 +49,13 @@
           :loading="loading"
           :items-per-page="rowsPerPage"
           class="elevation-1"
+          data-cy="tasks-table"
         >
           <template v-slot:item="{ item }">
-            <tr>
-              <td>{{ item.title }}</td>
-              <td>{{ item.shortDescription }}</td>
-              <td>
+            <tr :data-cy="`task-row-${item.id}`">
+              <td data-cy="task-title">{{ item.title }}</td>
+              <td data-cy="task-description">{{ item.shortDescription }}</td>
+              <td data-cy="task-status">
                 <v-chip
                   :color="getStatusColor(item.status)"
                   size="small"
@@ -61,7 +64,7 @@
                   {{ item.status }}
                 </v-chip>
               </td>
-              <td>
+              <td data-cy="task-priority">
                 <v-chip
                   :color="getPriorityColor(item.priority)"
                   size="small"
@@ -80,6 +83,7 @@
                     icon="mdi-pencil"
                     class="mr-2"
                     @click="editTask(item)"
+                    :data-cy="`edit-task-${item.id}`"
                   ></v-btn>
                   <v-btn
                     :id="`delete-task-${item.id}`"
@@ -88,6 +92,7 @@
                     density="comfortable"
                     icon="mdi-delete"
                     @click="deleteTask(item.id)"
+                    :data-cy="`delete-task-${item.id}`"
                   ></v-btn>
                 </div>
               </td>
