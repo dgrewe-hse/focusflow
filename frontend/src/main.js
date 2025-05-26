@@ -6,6 +6,10 @@ import * as directives from "vuetify/directives";
 import "vuetify/styles";
 import "@mdi/font/css/materialdesignicons.css";
 import router from "./router";
+import { authService } from "./services/auth";
+
+// Initialize authentication service
+authService.init();
 
 const vuetify = createVuetify({
   components,

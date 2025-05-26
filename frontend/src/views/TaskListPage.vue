@@ -7,6 +7,18 @@
           <img src="/logo.png" alt="FocusFlow Logo" class="header-logo" />
           <h1 class="header-title">FocusFlow</h1>
         </div>
+        <div class="header-right">
+          <span class="user-email">{{ user?.email }}</span>
+          <v-btn
+            color="white"
+            variant="text"
+            prepend-icon="mdi-logout"
+            @click="handleLogout"
+            class="ml-4"
+          >
+            Logout
+          </v-btn>
+        </div>
       </div>
     </header>
 
@@ -38,12 +50,30 @@
         >
           <template v-slot:item="{ item }">
             <tr>
-              <td>{{ item.name }}</td>
-              <td>{{ item.description }}</td>
+              <td>{{ item.title }}</td>
+              <td>{{ item.shortDescription }}</td>
+              <td>
+                <v-chip
+                  :color="getStatusColor(item.status)"
+                  size="small"
+                  variant="flat"
+                >
+                  {{ item.status }}
+                </v-chip>
+              </td>
+              <td>
+                <v-chip
+                  :color="getPriorityColor(item.priority)"
+                  size="small"
+                  variant="flat"
+                >
+                  {{ item.priority }}
+                </v-chip>
+              </td>
               <td class="text-right">
                 <div class="d-flex justify-end">
                   <v-btn
-                    :id="`edit-task-${item.name}`"
+                    :id="`edit-task-${item.id}`"
                     color="primary"
                     variant="text"
                     density="comfortable"
@@ -52,12 +82,12 @@
                     @click="editTask(item)"
                   ></v-btn>
                   <v-btn
-                    :id="`delete-task-${item.name}`"
+                    :id="`delete-task-${item.id}`"
                     color="error"
                     variant="text"
                     density="comfortable"
                     icon="mdi-delete"
-                    @click="deleteTask(item.name)"
+                    @click="deleteTask(item.id)"
                   ></v-btn>
                 </div>
               </td>
@@ -85,6 +115,22 @@
         No tasks available at the moment.
       </v-alert>
 
+      <!-- Backend Issue Alert -->
+      <v-alert
+        v-if="backendIssue"
+        type="warning"
+        class="mt-4"
+        variant="tonal"
+        border="start"
+        closable
+        @click:close="backendIssue = false"
+      >
+        <v-alert-title>Backend Database Issue</v-alert-title>
+        There's a temporary database configuration issue on the backend. Task
+        creation works, but task listing is currently unavailable. The
+        development team is working on resolving this.
+      </v-alert>
+
       <!-- Edit Dialog -->
       <v-dialog v-model="editDialog" max-width="600px">
         <v-card>
@@ -93,21 +139,21 @@
           <v-card-text>
             <v-form ref="editForm" id="edit-task-form">
               <v-text-field
-                id="edit-task-name"
-                v-model="editedTask.name"
-                label="Task Name"
+                id="edit-task-title"
+                v-model="editedTask.title"
+                label="Task Title"
                 variant="outlined"
                 density="comfortable"
-                :rules="[(v) => !!v || 'Task name is required']"
+                :rules="[(v) => !!v || 'Task title is required']"
                 required
                 class="mb-4"
-                data-cy="edit-task-name-input"
+                data-cy="edit-task-title-input"
               ></v-text-field>
 
               <v-textarea
                 id="edit-task-description"
-                v-model="editedTask.description"
-                label="Description"
+                v-model="editedTask.shortDescription"
+                label="Short Description"
                 variant="outlined"
                 density="comfortable"
                 :rules="[(v) => !!v || 'Description is required']"
@@ -148,48 +194,116 @@
 import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import api from "../services/api";
+import { authService, user } from "../services/auth";
 
 const router = useRouter();
 const taskList = ref([]);
 const loading = ref(false);
 const rowsPerPage = ref(10);
+const backendIssue = ref(false);
 
 const headers = [
-  { title: "Task Name", key: "name", align: "start" },
-  { title: "Description", key: "description", align: "start" },
+  { title: "Title", key: "title", align: "start" },
+  { title: "Description", key: "shortDescription", align: "start" },
+  { title: "Status", key: "status", align: "start" },
+  { title: "Priority", key: "priority", align: "start" },
   { title: "Actions", key: "actions", align: "end", sortable: false },
 ];
 
+/**
+ * Get color for task status
+ */
+const getStatusColor = (status) => {
+  const colors = {
+    OPEN: "blue",
+    IN_PROGRESS: "orange",
+    REVIEW: "purple",
+    BLOCKED: "red",
+    CLOSED: "green",
+  };
+  return colors[status] || "grey";
+};
+
+/**
+ * Get color for task priority
+ */
+const getPriorityColor = (priority) => {
+  const colors = {
+    LOW: "green",
+    MID: "orange",
+    HIGH: "red",
+    URGENT: "deep-purple",
+  };
+  return colors[priority] || "grey";
+};
+
+/**
+ * Fetch tasks from the backend
+ */
 const fetchTasks = async () => {
   loading.value = true;
   try {
-    const response = await api.get("/api/v1/tasks");
-    if (!response.data || Object.keys(response.data).length === 0) {
-      taskList.value = [];
-    } else if (Array.isArray(response.data)) {
-      taskList.value = response.data;
+    // Use the creator endpoint to get tasks created by the current user
+    // This avoids the problematic search query in the backend
+    const response = await api.get(
+      `/api/v1/tasks/creator/${user.value?.id}?includeTags=false`
+    );
+
+    // Handle the ApiResponse wrapper structure
+    if (response.data && response.data.success && response.data.data) {
+      taskList.value = Array.isArray(response.data.data)
+        ? response.data.data
+        : [];
     } else {
-      taskList.value = Object.values(response.data);
+      taskList.value = [];
     }
   } catch (error) {
     console.error("Error fetching tasks:", error);
+
+    // If there's a backend database error, show empty list for now
+    // This allows the frontend to work while backend issues are resolved
     taskList.value = [];
+
+    // You could also show a user-friendly message here
+    if (
+      error.response?.data?.message?.includes("LazyInitializationException") ||
+      error.response?.data?.message?.includes("operator does not exist")
+    ) {
+      console.warn(
+        "Backend database configuration issue detected. Showing empty task list."
+      );
+      backendIssue.value = true;
+    }
   } finally {
     loading.value = false;
   }
 };
 
+/**
+ * Navigate to create task page
+ */
 const createTask = () => {
   router.push("/task/create");
 };
 
-const deleteTask = async (name) => {
+/**
+ * Delete a task
+ */
+const deleteTask = async (taskId) => {
   try {
-    await api.delete(`/api/v1/tasks/${name}`);
+    await api.delete(`/api/v1/tasks/${taskId}`);
     await fetchTasks();
   } catch (error) {
     console.error("Error deleting task:", error);
   }
+};
+
+/**
+ * Handle user logout
+ */
+const handleLogout = () => {
+  authService.logout();
+  router.push("/login");
 };
 
 // Edit dialog state
@@ -197,29 +311,38 @@ const editDialog = ref(false);
 const editForm = ref(null);
 const updating = ref(false);
 const editedTask = ref({
-  name: "",
-  description: "",
-  originalName: "", // To store the original name for the API call
+  id: null,
+  title: "",
+  shortDescription: "",
 });
 
+/**
+ * Open edit dialog for a task
+ */
 const editTask = (task) => {
   editedTask.value = {
-    name: task.name,
-    description: task.description,
-    originalName: task.name, // Store original name for API reference
+    id: task.id,
+    title: task.title,
+    shortDescription: task.shortDescription,
   };
   editDialog.value = true;
 };
 
+/**
+ * Close edit dialog
+ */
 const closeEditDialog = () => {
   editDialog.value = false;
   editedTask.value = {
-    name: "",
-    description: "",
-    originalName: "",
+    id: null,
+    title: "",
+    shortDescription: "",
   };
 };
 
+/**
+ * Update a task
+ */
 const updateTask = async () => {
   const { valid } = await editForm.value.validate();
 
@@ -227,9 +350,9 @@ const updateTask = async () => {
 
   updating.value = true;
   try {
-    await api.put(`/api/v1/tasks/${editedTask.value.originalName}`, {
-      name: editedTask.value.name,
-      description: editedTask.value.description,
+    await api.put(`/api/v1/tasks/${editedTask.value.id}`, {
+      title: editedTask.value.title,
+      shortDescription: editedTask.value.shortDescription,
     });
     await fetchTasks();
     closeEditDialog();
@@ -261,12 +384,20 @@ onMounted(() => {
   max-width: 1280px;
   margin: 0 auto;
   padding: 0 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .header-left {
   display: flex;
   align-items: center;
   gap: 12px;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
 }
 
 .header-logo {
@@ -280,6 +411,12 @@ onMounted(() => {
   font-weight: 500;
   margin: 0;
   letter-spacing: 0.5px;
+}
+
+.user-email {
+  color: white;
+  font-size: 14px;
+  opacity: 0.9;
 }
 
 :deep(.v-data-table) {
