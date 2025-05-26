@@ -33,3 +33,15 @@ replay_pid*
 **/target/**
 **/build/**
 **/logs/**
+
+# node.js
+**/node_modules/**
+**/dist/**
+**/target/**
+
+# cypress
+**/cypress/screenshots/**
+**/cypress/videos/**
+
+# vscode
+.vscode/**
