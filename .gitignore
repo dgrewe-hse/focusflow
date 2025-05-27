@@ -43,6 +43,10 @@ replay_pid*
 **/cypress/screenshots/**
 **/cypress/videos/**
 
+# selenium
+**/selenium-tests/screenshots/**
+**/selenium-tests/videos/**
+
 # vscode
 .vscode/**
 
