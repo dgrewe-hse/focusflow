@@ -15,7 +15,14 @@
     "test:headless": "./cypress-runner.sh run",
     "test:auth": "npx cypress run --spec 'cypress/e2e/auth/**'",
     "test:e2e": "npx cypress run --spec 'cypress/e2e/e2e/**'",
-    "test:tasks": "npx cypress run --spec 'cypress/e2e/tasks/**'"
+    "test:tasks": "npx cypress run --spec 'cypress/e2e/tasks/**'",
+    "test:selenium": "./run-selenium-tests.sh all",
+    "test:selenium:auth": "./run-selenium-tests.sh auth",
+    "test:selenium:tasks": "./run-selenium-tests.sh tasks",
+    "test:selenium:integration": "./run-selenium-tests.sh integration",
+    "test:selenium:headless": "HEADLESS=true ./run-selenium-tests.sh all",
+    "test:selenium:chrome": "BROWSER=chrome ./run-selenium-tests.sh all",
+    "test:selenium:firefox": "BROWSER=firefox ./run-selenium-tests.sh all"
   },
   "dependencies": {
     "@mdi/font": "^7.4.47",
@@ -30,6 +37,11 @@
     "@vitejs/plugin-vue": "^5.0.0",
     "@vue/cli-service": "^5.0.8",
     "cypress": "^14.4.0",
-    "vite": "^6.3.5"
+    "vite": "^6.3.5",
+    "selenium-webdriver": "^4.21.0",
+    "chromedriver": "^125.0.1",
+    "geckodriver": "^4.4.0",
+    "mocha": "^10.6.0",
+    "chai": "^5.1.1"
   }
 }

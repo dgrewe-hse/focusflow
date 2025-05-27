@@ -24,10 +24,14 @@
     </header>
 
     <!-- Main Content -->
-    <v-container class="py-8">
+    <v-container
+      class="py-8"
+      data-cy="dashboard-container"
+      data-testid="dashboard"
+    >
       <!-- Title and Create Button -->
       <div class="d-flex justify-space-between align-center mb-6">
-        <h2 class="text-h4">Tasks</h2>
+        <h2 class="text-h4" data-cy="dashboard-title">Tasks</h2>
         <v-btn
           id="create-task-btn"
           color="primary"
