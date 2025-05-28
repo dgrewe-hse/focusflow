@@ -1,4 +1,6 @@
-      _____                    _____ _               
+[![CI Pipeline](https://github.com/dilara51/PowerpuffGirls/actions/workflows/ci.yml/badge.svg)](https://github.com/dilara51/PowerpuffGirls/actions/workflows/ci.yml)
+
+_____                    _____ _               
     |  ___|__   ___ _   _ ___|  ___| | _____      __
     | |_ / _ \ / __| | | / __| |_  | |/ _ \ \ /\ / /
     |  _| (_) | (__| |_| \__ \  _| | | (_) \ V  V / 
@@ -26,3 +28,6 @@ Above all, FocusFlow aims to streamline daily workflows. By avoiding bloated fun
 ## Lizenz
 
 Copyright 2025, licensed under Apache License, Version 2.0.
+
+
+test2
